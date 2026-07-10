@@ -1,7 +1,9 @@
-package com.deepfine.service.inventoryHistory.domain;
+package com.deepfine.service.inventoryHistory.repository;
 
 import com.deepfine.enums.InventoryChangeType;
+import com.deepfine.service.inventoryHistory.domain.InventoryChangedEvent;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Comment;
@@ -14,9 +16,9 @@ import static lombok.AccessLevel.PROTECTED;
  * 입고/출고 이벤트가 발생할 때마다 남기는 이력.
  * 재고 변경 트랜잭션이 커밋된 뒤, 컨슈머가 별도 트랜잭션으로 기록한다.
  */
-@Getter
 @Entity
 @Table(name = "INVENTORY_HISTORY")
+@Comment("입출고 이벤트 이력")
 @NoArgsConstructor(access = PROTECTED)
 public class InventoryHistoryEntity {
 
@@ -46,4 +48,27 @@ public class InventoryHistoryEntity {
     @Comment("이력 생성 시각")
     @Column(name = "CREATED_AT", nullable = false)
     private LocalDateTime createdAt;
+
+    @Builder
+    private InventoryHistoryEntity(
+            Long inventoryId,
+            InventoryChangeType type,
+            int changeQuantity,
+            int resultQuantity
+    ) {
+        this.inventoryId = inventoryId;
+        this.type = type;
+        this.changeQuantity = changeQuantity;
+        this.resultQuantity = resultQuantity;
+    }
+
+    public static InventoryHistoryEntity from(InventoryChangedEvent event) {
+        return InventoryHistoryEntity
+                .builder()
+                .inventoryId(event.inventoryId())
+                .type(event.type())
+                .changeQuantity(event.changeQuantity())
+                .resultQuantity(event.resultQuantity())
+                .build();
+    }
 }

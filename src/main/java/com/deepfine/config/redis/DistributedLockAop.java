@@ -1,5 +1,7 @@
 package com.deepfine.config.redis;
 
+import com.deepfine.error.ErrorCode;
+import com.deepfine.error.GlobalException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -37,7 +39,7 @@ public class DistributedLockAop {
         try {
             boolean available = rLock.tryLock(distributedLock.waitTime(), distributedLock.leaseTime(), distributedLock.timeUnit());  // (2)
             if (!available) {
-                return false;
+                throw new GlobalException(ErrorCode.LOCK_ACQUISITION_FAILED, "key=" + key);
             }
 
             return aopForTransaction.proceed(joinPoint);  // (3)
