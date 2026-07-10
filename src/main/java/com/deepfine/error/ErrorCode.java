@@ -14,6 +14,7 @@ public enum ErrorCode implements GlobalErrorType {
 	INVALID_QUANTITY(HttpStatus.BAD_REQUEST, "수량은 0보다 커야 합니다."),
 	LOCK_ACQUISITION_FAILED(HttpStatus.SERVICE_UNAVAILABLE, "다른 요청을 처리 중입니다. 잠시 후 다시 시도해 주세요."),
 	DUPLICATE_PRODUCT_NAME(HttpStatus.CONFLICT, "이미 등록된 상품명입니다."),
+	INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "서버 내부 오류가 발생했습니다."),
 	;
 
 	private final HttpStatus status;

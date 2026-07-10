@@ -17,6 +17,12 @@ public class InventoryController {
 
     private final InventoryService inventoryService;
 
+    @GetMapping("/{id}")
+    public GlobalResponse<InventoryResponse> getInventory(@PathVariable Long id) {
+        InventoryResponse response = InventoryResponse.from(inventoryService.getInventory(id));
+        return GlobalResponse.success(response);
+    }
+
     @PostMapping("/increase")
     public GlobalResponse<InventoryResponse> increase(@Valid @RequestBody InventoryIncreaseRequest request) {
         InventoryResponse response = InventoryResponse.from(

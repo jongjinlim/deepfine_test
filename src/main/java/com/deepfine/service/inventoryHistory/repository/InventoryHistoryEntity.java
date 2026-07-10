@@ -1,5 +1,6 @@
 package com.deepfine.service.inventoryHistory.repository;
 
+import com.deepfine.entity.BaseEntity;
 import com.deepfine.enums.InventoryChangeType;
 import com.deepfine.service.inventoryHistory.domain.InventoryChangedEvent;
 import jakarta.persistence.*;
@@ -8,8 +9,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Comment;
 
-import java.time.LocalDateTime;
-
 import static lombok.AccessLevel.PROTECTED;
 
 /**
@@ -17,11 +16,11 @@ import static lombok.AccessLevel.PROTECTED;
  * 재고 변경 트랜잭션이 커밋된 뒤, 컨슈머가 별도 트랜잭션으로 기록한다.
  */
 @Entity
-@Table(name = "INVENTORY_HISTORY")
+@Table(name = "INVENTORY_HISTORY", indexes = @Index(name = "IDX_INVENTORY_HISTORY_INVENTORY_ID", columnList = "INVENTORY_ID"))
 @Comment("입출고 이벤트 이력")
 @NoArgsConstructor(access = PROTECTED)
 @Getter
-public class InventoryHistoryEntity {
+public class InventoryHistoryEntity extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -45,10 +44,6 @@ public class InventoryHistoryEntity {
     @Comment("변경 후 남은 재고 수량")
     @Column(name = "RESULT_QUANTITY", nullable = false)
     private int resultQuantity;
-
-    @Comment("이력 생성 시각")
-    @Column(name = "CREATED_AT", nullable = false)
-    private LocalDateTime createdAt;
 
     @Builder
     private InventoryHistoryEntity(

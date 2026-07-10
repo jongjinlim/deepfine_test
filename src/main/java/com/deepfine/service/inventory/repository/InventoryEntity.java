@@ -1,5 +1,6 @@
 package com.deepfine.service.inventory.repository;
 
+import com.deepfine.entity.BaseEntity;
 import com.deepfine.service.inventory.domain.Inventory;
 import jakarta.persistence.*;
 import lombok.Builder;
@@ -10,8 +11,9 @@ import static lombok.AccessLevel.PROTECTED;
 
 @Entity
 @Table(name = "INVENTORY")
+@Comment("상품")
 @NoArgsConstructor(access = PROTECTED)
-public class InventoryEntity {
+public class InventoryEntity extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,7 +22,7 @@ public class InventoryEntity {
     private Long inventoryId;
 
     @Comment("상품명")
-    @Column(name = "NAME", nullable = false)
+    @Column(name = "NAME", nullable = false, unique = true)
     private String name;
 
     @Comment("현재 재고 수량")
