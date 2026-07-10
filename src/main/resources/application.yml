@@ -1,3 +1,5 @@
 spring:
   application:
     name: deepfine
+  profiles:
+    active: local
