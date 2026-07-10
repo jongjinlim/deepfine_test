@@ -20,6 +20,7 @@ import static lombok.AccessLevel.PROTECTED;
 @Table(name = "INVENTORY_HISTORY")
 @Comment("입출고 이벤트 이력")
 @NoArgsConstructor(access = PROTECTED)
+@Getter
 public class InventoryHistoryEntity {
 
     @Id

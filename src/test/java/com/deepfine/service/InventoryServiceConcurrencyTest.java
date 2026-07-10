@@ -38,18 +38,8 @@ class InventoryServiceConcurrencyTest {
         inventoryJpaRepository.deleteAll();
     }
 
-    /**
-     * Feature: 재고 출고 동시성 테스트
-     * Background
-     *     Given KURLY_001 이라는 이름의 재고 100개가 등록되어 있음
-     * <p>
-     * Scenario: 100명의 사용자가 동시에 접근해 재고를 1개씩 출고 요청함
-     *           Lock의 이름은 재고의 id로 설정함
-     * <p>
-     * Then 사용자들의 요청만큼 정확히 재고가 차감되어 0이 되어야 함
-     */
     @Test
-    @DisplayName("")
+    @DisplayName("같은 재고를 동시에 여러 번 출고해도 분산락 덕분에 수량이 정확히 차감된다.")
     void decreaseTest() throws InterruptedException {
         int numberOfThreads = 100;
         Inventory inventory = inventoryService.increase("TEST_PRODUCT_001", numberOfThreads);
@@ -79,17 +69,8 @@ class InventoryServiceConcurrencyTest {
         assertThat(persistInventory.getQuantity()).isZero();
     }
 
-    /**
-     * Feature: 신규 상품 입고 동시성 테스트
-     * Background
-     *     Given SPRING_ONION 이라는 이름의 재고는 아직 등록되어 있지 않음
-     * <p>
-     * Scenario: 100명의 사용자가 동시에 접근해 같은 상품명으로 재고를 1개씩 입고 요청함
-     *           Lock의 이름은 상품명으로 설정함
-     * <p>
-     * Then 재고 행은 하나만 생성되고, 사용자들의 요청만큼 정확히 수량이 합산되어야 함
-     */
     @Test
+    @DisplayName("존재하지 않는 상품명으로 동시에 여러 번 입고해도 재고 행이 하나만 생성되고 수량이 정확히 합산된다.")
     void increaseTest() throws InterruptedException {
         String name = "TEST_PRODUCT_001" + UUID.randomUUID();
 

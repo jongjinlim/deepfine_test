@@ -25,7 +25,7 @@ public class InventoryController {
     }
 
     @PostMapping("/{id}/decrease")
-    public GlobalResponse<InventoryResponse> outbound(
+    public GlobalResponse<InventoryResponse> decrease(
             @PathVariable Long id, @Valid @RequestBody InventoryDecreaseRequest request) {
         InventoryResponse response = InventoryResponse.from(
                 inventoryService.decrease(id, request.quantity()));
