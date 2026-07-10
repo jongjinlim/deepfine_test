@@ -19,6 +19,7 @@ import static lombok.AccessLevel.PROTECTED;
 @Entity
 @Table(name = "INVENTORY_HISTORY")
 @Comment("입출고 이벤트 이력")
+@Getter
 @NoArgsConstructor(access = PROTECTED)
 public class InventoryHistoryEntity {
 
@@ -70,5 +71,10 @@ public class InventoryHistoryEntity {
                 .changeQuantity(event.changeQuantity())
                 .resultQuantity(event.resultQuantity())
                 .build();
+    }
+
+    @PrePersist
+    private void prePersist() {
+        this.createdAt = LocalDateTime.now();
     }
 }
